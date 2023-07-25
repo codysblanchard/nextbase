@@ -7,69 +7,14 @@ generator client {
     provider = "prisma-client-js"
 }
 
-model List {
-    id          Int        @id @default(autoincrement())
-    title       String?    @db.Text
-    createdAt   DateTime   @default(now())
-    description String?    @db.Text
-    user        User       @relation(fields: [userId], references: [id])
-    userId      String
-    ListItems   ListItem[]
-}
-
-model ListItem {
-    id          Int     @id @default(autoincrement())
-    content     String? @db.Text
-    description String? @db.Text
-    list        List    @relation(fields: [listId], references: [id])
-    listId      Int
-}
-
-model Subscription {
-    id           Int    @id @default(autoincrement())
-    subscriber   User   @relation(fields: [subscriberId], references: [id], name: "Subscriber")
-    provider     User   @relation(fields: [providerId], references: [id], name: "Provider")
-    subscriberId String
-    providerId   String
-}
-
-model Group {
-    id          Int           @id @default(autoincrement())
-    name        String?       @db.Text
-    createdAt   DateTime      @default(now())
-    createdBy   User          @relation(fields: [createdById], references: [id])
-    createdById String
-    description String?       @db.Text
-    members     GroupMember[]
-}
-
-model GroupMember {
-    id      Int    @id @default(autoincrement())
-    group   Group  @relation(fields: [groupId], references: [id])
-    user    User   @relation(fields: [userId], references: [id])
-    groupId Int
-    userId  String
-    role    Role
-}
-
-enum Role {
-    ADMIN
-    MEMBER
-}
-
 model User {
-    id            String         @id @default(cuid())
+    id            String    @id @default(cuid())
     name          String?
-    email         String?        @unique
+    email         String?   @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
-    lists         List[]
-    subscriptions Subscription[] @relation("Subscriber")
-    subscribers   Subscription[] @relation("Provider")
-    groups        GroupMember[]
-    myGroups      Group[]
 }
 
 model Account {
